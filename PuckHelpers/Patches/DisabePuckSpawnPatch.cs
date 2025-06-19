@@ -1,5 +1,7 @@
 using HarmonyLib;
 
+using PuckHelpers.Core;
+
 namespace PuckHelpers.Patches;
 
 /// <summary>
@@ -11,8 +13,26 @@ public static class DisablePuckSpawnPatch
     /// <summary>
     /// Whether or not the spawn is disabled.
     /// </summary>
-    public static bool IsDisabled { get; set; }
+    public static bool IsDisabled
+    {
+        get => field;
+        set
+        {
+            field = value;
+            HelpersPlugin.LogInfo("PuckHelpers / API", $"DisablePuckSpawn changed to {value}");
+        }
+    }
 
     [HarmonyPrefix]
-    public static bool Prefix() => !IsDisabled;
+    public static bool Prefix()
+    {
+        if (IsDisabled)
+        {
+            HelpersPlugin.LogInfo("PuckHelpers / API", "Prevented puck spawn");
+            return false;
+        }
+
+        HelpersPlugin.LogInfo("PuckHelpers / API", "Allowed puck spawn");
+        return true;
+    }
 }

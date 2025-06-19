@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PuckHelpers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58beca247c8fe12f03fd557964264afee98aa88d")]
 [assembly: System.Reflection.AssemblyProductAttribute("PuckHelpers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PuckHelpers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

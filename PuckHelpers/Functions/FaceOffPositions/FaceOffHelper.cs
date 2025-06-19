@@ -7,9 +7,6 @@ namespace PuckHelpers.Functions.FaceOffPositions;
 
 public static class FaceOffHelper
 {
-    private static Vector3? cachedPuckPos;
-    private static Quaternion? cachedPuckRot;
-    
     /// <summary>
     /// Converts a string position ID into a position name.
     /// </summary>
@@ -63,30 +60,24 @@ public static class FaceOffHelper
             var playerManager = NetworkBehaviourSingleton<PlayerManager>.Instance;
             var puckManager = NetworkBehaviourSingleton<PuckManager>.Instance;
 
-            if (!cachedPuckPos.HasValue || !cachedPuckRot.HasValue)
-            {
-                HelpersPlugin.LogInfo("PuckHelpers / FaceOff", "Updating default puck position");
-
-                var faceOffPuck = puckManager.puckPositions.FirstOrDefault(x => x.Phase is GamePhase.FaceOff);
-
-                if (faceOffPuck is null)
-                {
-                    HelpersPlugin.LogError("PuckHelpers / FaceOff", $"No face-off puck position is defined");
-                }
-                else
-                {
-                    cachedPuckPos = faceOffPuck.transform.position;
-                    cachedPuckRot = faceOffPuck.transform.rotation;
-
-                    HelpersPlugin.LogInfo("PuckHelpers / FaceOff",
-                        $"Cached default puck position: {cachedPuckPos.Value}, rotation: {cachedPuckRot.Value}");
-                }
-            }
-
             var phaseTime = gameManager.PhaseDurationMap.TryGetValue(GamePhase.FaceOff, out var time) ? time : 3;
             var roundTime = gameManager.GameState.Value.Time;
 
             var eventCallback = default(Action<Dictionary<string, object>>);
+            
+            var puckPos = Vector3.zero;
+            var puckRot = Quaternion.identity;
+
+            if (position.HasPuckPosition)
+            {
+                puckPos = GetGround(position.PuckPosition.Vector);
+                
+                HelpersPlugin.LogInfo("PuckHelpers / FaceOff", $"Selected custom puck position (X={puckPos.x}; Y={puckPos.y}; Z={puckPos.z})");
+            }
+            else
+            {
+                HelpersPlugin.LogInfo("PuckHelpers / FaceOff", $"Spawning puck at default position (X={puckPos.x}; Y={puckPos.y}; Z={puckPos.z})");
+            }
 
             eventCallback = _ =>
             {
@@ -97,6 +88,10 @@ public static class FaceOffHelper
                 curState.Time = roundTime;
 
                 gameManager.GameState.Value = curState;
+                
+                SpawnPuck(puckPos, puckRot, puckManager.puckPrefab);
+                
+                DisablePuckSpawnPatch.IsDisabled = false;
             };
 
             DisablePuckSpawnPatch.IsDisabled = true;
@@ -105,11 +100,7 @@ public static class FaceOffHelper
 
             eventManager.AddEventListener("Event_OnGamePhaseChanged", eventCallback);
 
-            var puckPos = cachedPuckPos.Value;
-            var puckRot = cachedPuckRot.Value;
-            
-            if (position.HasPuckPosition)
-                puckPos = position.PuckPosition.Vector;
+            puckManager.Server_DespawnPucks(true);
 
             foreach (var player in playerManager.players)
             {
@@ -142,15 +133,21 @@ public static class FaceOffHelper
                 HelpersPlugin.LogInfo("PuckHelpers / FaceOff",
                     $"Teleported player {player?.Username?.Value ?? "(null)"} to a custom position!");
             }
-            
-            SpawnPuck(puckPos, puckRot, puckManager.puckPrefab);
         }
         catch (Exception ex)
         {
             HelpersPlugin.LogError("PuckHelpers / FaceOff", ex);
         }
+    }
+    
+    private static Vector3 GetGround(Vector3 pos)
+    {
+        pos.y += 1f;
 
-        DisablePuckSpawnPatch.IsDisabled = false;
+        if (Physics.Raycast(pos, Vector3.down, out var hit, 1.5f))
+            return hit.point;
+        
+        return pos;
     }
 
     private static void SpawnPuck(Vector3 position, Quaternion rotation, Puck prefab)
@@ -158,8 +155,9 @@ public static class FaceOffHelper
         var puck = UnityEngine.Object.Instantiate(prefab, position, rotation);
         
         puck.IsReplay.Value = false;
+        puck.Rigidbody.AddForce(Vector3.zero, ForceMode.VelocityChange);
         puck.NetworkObject.Spawn();
         
-        Debug.Log(string.Format("[PuckManager] Spawned puck !{0}!", puck.NetworkObjectId));
+        Debug.Log(string.Format("[PuckManager] Spawned CUSTOM puck !{0}!", puck.NetworkObjectId));
     }
 }
