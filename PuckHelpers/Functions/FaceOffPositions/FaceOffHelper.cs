@@ -92,9 +92,11 @@ public static class FaceOffHelper
                 SpawnPuck(puckPos, puckRot, puckManager.puckPrefab);
                 
                 DisablePuckSpawnPatch.IsDisabled = false;
+                DisableRespawnPatch.IsDisabled = false;
             };
 
             DisablePuckSpawnPatch.IsDisabled = true;
+            DisableRespawnPatch.IsDisabled = true;
 
             gameManager.Server_SetPhase(GamePhase.FaceOff, phaseTime);
 
@@ -128,7 +130,8 @@ public static class FaceOffHelper
                     continue;
                 }
 
-                player.PlayerBody.Server_Teleport(positionValue.Position.Vector, positionValue.Rotation.Quaternion);
+                player.Server_DespawnCharacter();
+                player.Server_SpawnCharacter(positionValue.Position.Vector, positionValue.Rotation.Quaternion, player.Role.Value);
 
                 HelpersPlugin.LogInfo("PuckHelpers / FaceOff",
                     $"Teleported player {player?.Username?.Value ?? "(null)"} to a custom position!");
@@ -146,7 +149,8 @@ public static class FaceOffHelper
 
         if (Physics.Raycast(pos, Vector3.down, out var hit, 1.5f))
             return hit.point;
-        
+
+        pos.y -= 1f;
         return pos;
     }
 
