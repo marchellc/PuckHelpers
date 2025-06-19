@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <LangVersion>preview</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="0Harmony">
+        <HintPath>..\..\PuckRefs\0Harmony.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp-firstpass">
+        <HintPath>..\..\PuckRefs\Assembly-CSharp-firstpass-publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="AYellowpaper.SerializedCollections">
+        <HintPath>..\..\PuckRefs\AYellowpaper.SerializedCollections-publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="DebugGUI">
+        <HintPath>..\..\PuckRefs\DebugGUI-publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="DOTween">
+        <HintPath>..\..\PuckRefs\DOTween-publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="DOTween.Modules">
+        <HintPath>..\..\PuckRefs\DOTween.Modules-publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="Linework">
+        <HintPath>..\..\PuckRefs\Linework-publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>..\..\PuckRefs\Newtonsoft.Json.dll</HintPath>
+      </Reference>
+      <Reference Include="Puck">
+        <HintPath>..\..\PuckRefs\Puck-publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="SingularityGroup.HotReload.Runtime">
+        <HintPath>..\..\PuckRefs\SingularityGroup.HotReload.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="SingularityGroup.HotReload.Runtime.Public">
+        <HintPath>..\..\PuckRefs\SingularityGroup.HotReload.Runtime.Public.dll</HintPath>
+      </Reference>
+      <Reference Include="SocketIO.Core">
+        <HintPath>..\..\PuckRefs\SocketIO.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="SocketIO.Serializer.Core">
+        <HintPath>..\..\PuckRefs\SocketIO.Serializer.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="SocketIO.Serializer.SystemTextJson">
+        <HintPath>..\..\PuckRefs\SocketIO.Serializer.SystemTextJson.dll</HintPath>
+      </Reference>
+      <Reference Include="SocketIOClient">
+        <HintPath>..\..\PuckRefs\SocketIOClient.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Collections">
+        <HintPath>..\..\PuckRefs\Unity.Collections.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Netcode.Runtime">
+        <HintPath>..\..\PuckRefs\Unity.Netcode.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>..\..\PuckRefs\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>..\..\PuckRefs\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.PhysicsModule">
+        <HintPath>..\..\PuckRefs\UnityEngine.PhysicsModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
