@@ -13,26 +13,14 @@ public static class DisablePuckSpawnPatch
     /// <summary>
     /// Whether or not the spawn is disabled.
     /// </summary>
-    public static bool IsDisabled
-    {
-        get => field;
-        set
-        {
-            field = value;
-            HelpersPlugin.LogInfo("PuckHelpers / API", $"DisablePuckSpawn changed to {value}");
-        }
-    }
+    public static bool IsDisabled { get; set; }
 
     [HarmonyPrefix]
     public static bool Prefix()
     {
         if (IsDisabled)
-        {
-            HelpersPlugin.LogInfo("PuckHelpers / API", "Prevented puck spawn");
             return false;
-        }
 
-        HelpersPlugin.LogInfo("PuckHelpers / API", "Allowed puck spawn");
         return true;
     }
 }

@@ -74,23 +74,44 @@ public static class CustomCommands
             return false;
         }
 
+        var isSuccess = false;
+
         try
         {
-            return handler(sender, args, out response);
+            isSuccess = handler(sender, args, out response);
         }
         catch (Exception ex)
         {
             response = ex.Message;
-            return true;
+            isSuccess = false;
         }
+
+        if (string.IsNullOrEmpty(response))
+        {
+            response = "No response!";
+            isSuccess = false;
+        }
+
+        if (isSuccess)
+            response = $"<color=green><b>{response}</b></color>";
+        else
+            response = $"<color=red><b>{response}</b></color>";
+
+        return true;
     }
 
     internal static void RegisterCommands()
     {
         GetPositionCommand.RegisterCommand();
-        SetFaceOffPositionCommand.RegisterCommand();
+        
+        SetPositionCommand.RegisterCommand();
+        SetPuckPositionCommand.RegisterCommand();
+        
         StartFaceOffCommand.RegisterCommand();
+        
         RemovePositionCommand.RegisterCommand();
+        RemovePuckPositionCommand.RegisterCommand();
+        
         ListPositionsCommand.RegisterCommand();
     }
 }

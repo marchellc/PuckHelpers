@@ -13,27 +13,14 @@ public static class DisableRespawnPatch
     /// <summary>
     /// Whether or not respawning is disabled.
     /// </summary>
-    public static bool IsDisabled
-    {
-        get => field;
-        set
-        {
-            field = value;
-            
-            HelpersPlugin.LogInfo("PuckHelpers / API", $"DisableRespawn changed to {value}");
-        }
-    }
+    public static bool IsDisabled { get; set; }
 
     [HarmonyPrefix]
     public static bool Prefix()
     {
         if (IsDisabled)
-        {
-            HelpersPlugin.LogInfo("PuckHelpers / API", "Prevented respawn");
             return false;
-        }
-        
-        HelpersPlugin.LogInfo("PuckHelpers / API", "Allowed respawn");
+
         return true;
     }
 }

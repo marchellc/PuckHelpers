@@ -13,19 +13,19 @@ public class StartFaceOffCommand
         if (!sender.IsPermitted())
         {
             response = "You do not have the required permissions to invoke this command.";
-            return true;
+            return false;
         }
 
         if (args.Count < 1)
         {
             response = "Missing arguments! Usage: /startfaceoff <Position Name>";
-            return true;
+            return false;
         }
 
         if (!FaceOffPositionManager.Positions.TryGetValue(args.At(0), out var position))
         {
             response = $"Unknown custom position name: {args.At(0)}";
-            return true;
+            return false;
         }
         
         FaceOffHelper.StartCustom(position);
@@ -37,5 +37,6 @@ public class StartFaceOffCommand
     internal static void RegisterCommand()
     {
         CustomCommands.RegisterCommand("startfaceoff", HandleCommand);
+        CustomCommands.RegisterCommand("startfo", HandleCommand);
     }
 }

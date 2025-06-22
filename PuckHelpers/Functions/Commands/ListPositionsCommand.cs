@@ -13,13 +13,13 @@ public class ListPositionsCommand
         if (!sender.IsPermitted())
         {
             response = "You do not have permission to use this command.";
-            return true;
+            return false;
         }
 
         if (FaceOffPositionManager.Positions.Count == 0)
         {
             response = "No face-off positions are saved.";
-            return true;
+            return false;
         }
 
         response = $"Positions ({FaceOffPositionManager.Positions.Count}):";

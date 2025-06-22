@@ -70,13 +70,8 @@ public static class FaceOffHelper
 
             if (position.HasPuckPosition)
             {
-                puckPos = GetGround(position.PuckPosition.Vector);
-                
-                HelpersPlugin.LogInfo("PuckHelpers / FaceOff", $"Selected custom puck position (X={puckPos.x}; Y={puckPos.y}; Z={puckPos.z})");
-            }
-            else
-            {
-                HelpersPlugin.LogInfo("PuckHelpers / FaceOff", $"Spawning puck at default position (X={puckPos.x}; Y={puckPos.y}; Z={puckPos.z})");
+                puckPos = position.PuckPosition.Vector;
+                puckPos.y += 1f;
             }
 
             eventCallback = _ =>
@@ -124,34 +119,16 @@ public static class FaceOffHelper
                     : position.BluePositions;
 
                 if (!positions.TryGetValue(name, out var positionValue))
-                {
-                    HelpersPlugin.LogWarn("PuckHelpers / FaceOff",
-                        $"Undefined position ({name}, team: {player.PlayerPosition.Team}), using default.");
                     continue;
-                }
 
                 player.Server_DespawnCharacter();
                 player.Server_SpawnCharacter(positionValue.Position.Vector, positionValue.Rotation.Quaternion, player.Role.Value);
-
-                HelpersPlugin.LogInfo("PuckHelpers / FaceOff",
-                    $"Teleported player {player?.Username?.Value ?? "(null)"} to a custom position!");
             }
         }
         catch (Exception ex)
         {
             HelpersPlugin.LogError("PuckHelpers / FaceOff", ex);
         }
-    }
-    
-    private static Vector3 GetGround(Vector3 pos)
-    {
-        pos.y += 1f;
-
-        if (Physics.Raycast(pos, Vector3.down, out var hit, 1.5f))
-            return hit.point;
-
-        pos.y -= 1f;
-        return pos;
     }
 
     private static void SpawnPuck(Vector3 position, Quaternion rotation, Puck prefab)

@@ -7,21 +7,21 @@ namespace PuckHelpers.Functions.Commands;
 /// <summary>
 /// Commands to set face-off positions.
 /// </summary>
-public static class SetFaceOffPositionCommand
+public static class SetPositionCommand
 {
     private static bool HandleCommand(Player sender, ArraySegment<string> args, out string response)
     {
         if (!sender.IsPermitted())
         {
             response = "You do not have the required permissions to invoke this command.";
-            return true;
+            return false;
         }
 
         if (args.Count < 2)
         {
             response =
                 "Missing arguments! Usage: /setpos <Custom Position Name> <Team Name (Blue / Red)> <Role Position Name (RightWing, LeftWing etc)>";
-            return true;
+            return false;
         }
 
         var positionName = args.At(0);
@@ -44,7 +44,7 @@ public static class SetFaceOffPositionCommand
             else
             {
                 response = "Invalid 'Team Name' argument, must be 'Blue (or B)' or 'Red (or R)'";
-                return true;
+                return false;
             }
         }
 
@@ -82,7 +82,7 @@ public static class SetFaceOffPositionCommand
             {
                 response =
                     "Invalid 'Role Name' argument! Supported are: RightWing / RW, RightDefense / RD, LeftWing / LW, LeftDefense / LD, Center / C, Goalie / G";
-                return true;
+                return false;
             }
         }
 
@@ -97,6 +97,8 @@ public static class SetFaceOffPositionCommand
                 Y = vectorPos.y,
                 Z = vectorPos.z
             };
+            
+            FaceOffPositionManager.SavePositions();
 
             response =
                 $"Saved puck position (X={position.PuckPosition.X}; Y={position.PuckPosition.Y}; Z={position.PuckPosition.Z})";

@@ -10,7 +10,7 @@ internal static class GetPositionCommand
         if (!sender.IsPermitted())
         {
             response = "You do not have permission to use this command.";
-            return true;
+            return false;
         }
 
         var str = string.Empty;
@@ -38,7 +38,13 @@ internal static class GetPositionCommand
         CustomCommands.RegisterCommand("getpos", HandleCommand);
     }
 
-    private static string VectorToString(string header, Vector3 vector)
+    /// <summary>
+    /// Converts a vector to a string.
+    /// </summary>
+    /// <param name="header">The header.</param>
+    /// <param name="vector">The vector.</param>
+    /// <returns>The converted vector.</returns>
+    public static string VectorToString(string header, Vector3 vector)
     {
         return string.Concat(header,
             "X = ", vector.x,
